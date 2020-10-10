@@ -14,8 +14,11 @@ function NavbarItems({ clicked, mobile }) {
         <NavbarLink mobile={mobile} clicked={clicked} link="profile">
           Account
         </NavbarLink>
-        <NavbarLink mobile={mobile} clicked={clicked} link="logout">
-          Logout
+        <NavbarLink mobile={mobile} clicked={clicked} link="login">
+          Login
+        </NavbarLink>
+        <NavbarLink mobile={mobile} clicked={clicked} link="signup">
+          SignUp
         </NavbarLink>
       </Ul>
     </Nav>

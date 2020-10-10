@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Container } from '../../layout/elements/index';
+import { Container } from '../../layout/elements';
 
 import Logo from '../logo/logo.component';
 import NavbarItems from '../navbar-items/navbar-items.components';
