@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'redux';
 import { Formik, Field } from 'formik';
 import * as Yup from 'yup';
 
@@ -9,6 +10,8 @@ import FormInput from '../../../components/form-input/form-input.component';
 import FormButton from '../../../components/form-button/form-button.component';
 import FormMessage from '../../../components/form-message/form-message.component';
 import Heading from '../../../components/heading/heading.component';
+
+import * as actions from '../../../redux/actions';
 
 const MessageWrapper = styled.div`
   position: absolute;
@@ -28,6 +31,8 @@ const SignUpSchema = Yup.object().shape({
     .email('Invalid email.')
     .required('The email is required.'),
   password: Yup.string()
+    .required('The password is required.')
+    .min(8, 'The password is to short.')
     .required('The passoword is required.')
     .min(8, 'The password is too short.'),
   confirmPassword: Yup.string()
@@ -35,7 +40,7 @@ const SignUpSchema = Yup.object().shape({
     .required('You need to confirm your password.'),
 });
 
-const SignUp = ({ loading, error }) => {
+const SignUp = ({ signUp, loading, error }) => {
   return (
     <Formik
       initialValues={{
@@ -48,6 +53,8 @@ const SignUp = ({ loading, error }) => {
       validationSchema={SignUpSchema}
       onSubmit={(values, { setSubmitting }) => {
         console.log(values);
+        signUp(values);
+        setSubmitting(false);
       }}
     >
       {({ isSubmitting, isValid }) => (
@@ -107,5 +114,10 @@ const SignUp = ({ loading, error }) => {
     </Formik>
   );
 };
+const mapStateToProps = (state) => ({});
 
-export default SignUp;
+const mapDispatchToProps = {
+  signUp: actions.signUp,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignUp);
