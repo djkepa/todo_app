@@ -1,5 +1,6 @@
 import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import Layout from './layout/layout';
 
@@ -8,19 +9,31 @@ import Todos from './containers/todos/todos.container';
 import Login from './containers/Auth/login/login.container';
 import SignUp from './containers/Auth/signup/signup.container';
 
-function App() {
-  return (
-    <Layout>
+function App({ loggedIn }) {
+  let routes;
+  if (loggedIn) {
+    routes = (
       <Switch>
         <Route exact path="/" component={Home} />
-        <Route exact path="/profile" component={Todos} />
-        <Route exact path="/login" component={Login} />
-        <Route exact path="/signup" component={SignUp} />
-
+        <Route exact path="/todos" component={Todos} />
         <Redirect to="/" />
       </Switch>
-    </Layout>
-  );
+    );
+  } else {
+    routes = (
+      <Switch>
+        <Route exact path="/" component={Home} />
+        <Route exact path="/login" component={Login} />
+        <Route exact path="/signup" component={SignUp} />
+        <Redirect to="/" />
+      </Switch>
+    );
+  }
+  return <Layout>{routes}</Layout>;
 }
 
-export default App;
+const mapStateToProps = ({ firebase }) => ({
+  loggedIn: firebase.auth.uid ? true : null,
+});
+
+export default connect(mapStateToProps)(App);

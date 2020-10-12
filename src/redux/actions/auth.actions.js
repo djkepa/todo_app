@@ -1,4 +1,4 @@
-import * as actions from './actionTypes';
+import * as actions from './auth.types';
 
 // Sign up action creator
 export const signUp = (data) => async (
@@ -14,5 +14,14 @@ export const signUp = (data) => async (
       .auth()
       .createUserWithEmailAndPassword(data.email, data.password);
     console.log(res.user.uid);
-  } catch (err) {}
+    await firestore.collection('users').doc(res.user.uid).set({
+      firstName: data.firstName,
+      lastName: data.lastName,
+    });
+  } catch (err) {
+    dispatch({ type: actions.AUTH_FAIL, payload: err.message });
+
+    console.log(err.message);
+  }
+  dispatch({ type: actions.AUTH_END });
 };

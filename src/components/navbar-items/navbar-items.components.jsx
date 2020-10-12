@@ -4,9 +4,25 @@ import NavbarLink from '../navbar-link/navbar-link.component';
 
 import { Nav, Ul } from './navbar-items.styles';
 
-function NavbarItems({ clicked, mobile }) {
-  return (
-    <Nav>
+function NavbarItems({ clicked, mobile, loggedIn }) {
+  let links;
+
+  if (loggedIn.uid) {
+    links = (
+      <Ul mobile={mobile}>
+        <NavbarLink mobile={mobile} clicked={clicked} link="/">
+          Home
+        </NavbarLink>
+        <NavbarLink mobile={mobile} clicked={clicked} link="/todos">
+          Todos
+        </NavbarLink>
+        <NavbarLink mobile={mobile} clicked={clicked} link="logout">
+          Logout
+        </NavbarLink>
+      </Ul>
+    );
+  } else {
+    links = (
       <Ul mobile={mobile}>
         <NavbarLink mobile={mobile} clicked={clicked} link="/">
           Todos
@@ -21,8 +37,9 @@ function NavbarItems({ clicked, mobile }) {
           SignUp
         </NavbarLink>
       </Ul>
-    </Nav>
-  );
+    );
+  }
+  return <Nav>{links}</Nav>;
 }
 
 export default NavbarItems;

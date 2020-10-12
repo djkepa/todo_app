@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'redux';
+import { connect } from 'react-redux';
 import { Formik, Field } from 'formik';
 import * as Yup from 'yup';
 
@@ -114,7 +114,10 @@ const SignUp = ({ signUp, loading, error }) => {
     </Formik>
   );
 };
-const mapStateToProps = (state) => ({});
+const mapStateToProps = ({ auth }) => ({
+  loading: auth.loading,
+  error: auth.error,
+});
 
 const mapDispatchToProps = {
   signUp: actions.signUp,

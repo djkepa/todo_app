@@ -7,13 +7,13 @@ import NavbarItems from '../navbar-items/navbar-items.components';
 
 import { FixedWrapper, Wrapper } from './navbar.styles';
 
-const Navbar = () => {
+const Navbar = ({ loggedIn }) => {
   return (
     <FixedWrapper>
       <Container>
         <Wrapper>
           <Logo />
-          <NavbarItems />
+          <NavbarItems loggedIn={loggedIn} />
         </Wrapper>
       </Container>
     </FixedWrapper>

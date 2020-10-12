@@ -4,38 +4,22 @@ import App from './App';
 
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
+import Loader from './components/loader/loader.component';
 
-import { compose, createStore, applyMiddleware } from 'redux';
-import rootReducer from './redux/reducers';
-import { Provider } from 'react-redux';
-import thunk from 'redux-thunk';
+import { Provider, useSelector } from 'react-redux';
+import { ReactReduxFirebaseProvider, isLoaded } from 'react-redux-firebase';
 
-import firebase from './Firebase/Firebase';
-import { ReactReduxFirebaseProvider, getFirebase } from 'react-redux-firebase';
-import { createFirestoreInstance, getFirestore } from 'redux-firestore';
+import store from './redux/store';
+import { rrfProps } from './redux/store';
 
 import theme from './utils/theme';
 import GlobalStyles from './utils/global';
 
-const composeEnhancers =
-  (process.env.NODE_ENV === 'development'
-    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-    : null) || compose;
-
-const store = createStore(
-  rootReducer,
-  composeEnhancers(
-    applyMiddleware(thunk.withExtraArgument({ getFirebase, getFirestore })),
-  ),
-);
-
-// react-redux-firebase config
-const rrfProps = {
-  firebase,
-  config: {},
-  dispatch: store.dispatch,
-  createFirestoreInstance,
-};
+function AuthIsLoaded({ children }) {
+  const auth = useSelector((state) => state.firebase.auth);
+  if (!isLoaded(auth)) return <Loader />;
+  return children;
+}
 
 ReactDOM.render(
   <Provider store={store}>
@@ -43,8 +27,10 @@ ReactDOM.render(
       <BrowserRouter>
         <ThemeProvider theme={theme}>
           <>
-            <App />
-            <GlobalStyles />
+            <AuthIsLoaded>
+              <App />
+              <GlobalStyles />
+            </AuthIsLoaded>
           </>
         </ThemeProvider>
       </BrowserRouter>

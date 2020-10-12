@@ -6,7 +6,7 @@ import NavbarItems from '../navbar-items/navbar-items.components';
 
 import { FixedWrapper, Wrapper, Menu } from './side-drawer.styles';
 
-const SideDrawer = () => {
+const SideDrawer = ({ loggedIn }) => {
   const [isOpened, setIsOpened] = useState(false);
   return (
     <>
@@ -17,7 +17,11 @@ const SideDrawer = () => {
         </Wrapper>
       </FixedWrapper>
       <Menu opened={isOpened}>
-        <NavbarItems mobile clicked={() => setIsOpened(false)} />
+        <NavbarItems
+          loggedIn={loggedIn}
+          mobile
+          clicked={() => setIsOpened(false)}
+        />
       </Menu>
     </>
   );
