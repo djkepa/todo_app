@@ -6,17 +6,29 @@ import Layout from './layout/layout';
 
 import Home from './containers/home/home.container';
 import Todos from './containers/todos/todos.container';
-import Login from './containers/Auth/login/login.container';
-import SignUp from './containers/Auth/signup/signup.container';
-import Logout from './containers/Auth/logout/logout.container';
+import Login from './containers/Auth/log-in/log-in.container';
+import SignUp from './containers/Auth/sign-up/sign-up.container';
+import Logout from './containers/Auth/log-out/log-out.container';
+import VerifyEmail from './containers/Auth/verify-email/verify-email.container';
+import RecoverPassword from './containers/Auth/recover-password/recover-password.container';
 
-function App({ loggedIn }) {
+function App({ loggedIn, emailVerified }) {
   let routes;
-  if (loggedIn) {
+
+  if (loggedIn && !emailVerified) {
     routes = (
       <Switch>
-        <Route exact path="/" component={Home} />
-        <Route exact path="/todos" component={Todos} />
+        <Route exact path="/verify-email" component={VerifyEmail} />
+        <Route exact path="/profile" component={Todos} />
+        <Route exact path="/logout" component={Logout} />
+        <Redirect to="/verify-email" />
+      </Switch>
+    );
+  } else if (loggedIn && emailVerified) {
+    routes = (
+      <Switch>
+        <Route exact path="/" component={Todos} />
+        <Route exact path="/profile" component={Home} />
         <Route exact path="/logout" component={Logout} />
         <Redirect to="/" />
       </Switch>
@@ -26,6 +38,7 @@ function App({ loggedIn }) {
       <Switch>
         <Route exact path="/login" component={Login} />
         <Route exact path="/signup" component={SignUp} />
+        <Route exact path="/recover" component={RecoverPassword} />
         <Redirect to="/login" />
       </Switch>
     );
@@ -34,7 +47,8 @@ function App({ loggedIn }) {
 }
 
 const mapStateToProps = ({ firebase }) => ({
-  loggedIn: firebase.auth.uid ? true : null,
+  loggedIn: firebase.auth.uid,
+  emailVerified: firebase.auth.emailVerified,
 });
 
 export default connect(mapStateToProps)(App);
