@@ -1,6 +1,5 @@
 import * as actions from './auth.types';
 
-// Sign up action creator
 export const signUp = (data) => async (
   dispatch,
   getState,
@@ -14,14 +13,39 @@ export const signUp = (data) => async (
       .auth()
       .createUserWithEmailAndPassword(data.email, data.password);
     console.log(res.user.uid);
+
     await firestore.collection('users').doc(res.user.uid).set({
       firstName: data.firstName,
       lastName: data.lastName,
     });
+    dispatch({ type: actions.AUTH_SUCCESS });
   } catch (err) {
     dispatch({ type: actions.AUTH_FAIL, payload: err.message });
-
-    console.log(err.message);
   }
   dispatch({ type: actions.AUTH_END });
 };
+
+export const signOut = () => async (dispatch, getState, { getFirebase }) => {
+  const firebase = getFirebase();
+  try {
+    await firebase.auth().signOut();
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+export const signIn = (data) => async (dispatch, getState, { getFirebase }) => {
+  const firebase = getFirebase();
+  dispatch({ type: actions.AUTH_START });
+  try {
+    await firebase.auth().signInWithEmailAndPassword(data.email, data.password);
+    dispatch({ type: actions.AUTH_SUCCESS });
+  } catch (err) {
+    dispatch({ type: actions.AUTH_FAIL, payload: err.message });
+  }
+  dispatch({ type: actions.AUTH_END });
+};
+
+export const clean = () => ({
+  type: actions.CLEAN_UP,
+});
