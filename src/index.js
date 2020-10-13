@@ -9,8 +9,7 @@ import Loader from './components/loader/loader.component';
 import { Provider, useSelector } from 'react-redux';
 import { ReactReduxFirebaseProvider, isLoaded } from 'react-redux-firebase';
 
-import store from './redux/store';
-import { rrfProps } from './redux/store';
+import store, { rrfProps } from './redux/store';
 
 import theme from './utils/theme';
 import GlobalStyles from './utils/global';

@@ -4,13 +4,13 @@ import { connect } from 'react-redux';
 
 import Layout from './layout/layout';
 
-import Home from './containers/home/home.container';
 import Todos from './containers/todos/todos.container';
 import Login from './containers/Auth/log-in/log-in.container';
 import SignUp from './containers/Auth/sign-up/sign-up.container';
 import Logout from './containers/Auth/log-out/log-out.container';
 import VerifyEmail from './containers/Auth/verify-email/verify-email.container';
 import RecoverPassword from './containers/Auth/recover-password/recover-password.container';
+import Profile from './containers/Auth/profile/profile.container';
 
 function App({ loggedIn, emailVerified }) {
   let routes;
@@ -19,7 +19,7 @@ function App({ loggedIn, emailVerified }) {
     routes = (
       <Switch>
         <Route exact path="/verify-email" component={VerifyEmail} />
-        <Route exact path="/profile" component={Todos} />
+        <Route exact path="/profile" component={Profile} />
         <Route exact path="/logout" component={Logout} />
         <Redirect to="/verify-email" />
       </Switch>
@@ -28,7 +28,7 @@ function App({ loggedIn, emailVerified }) {
     routes = (
       <Switch>
         <Route exact path="/" component={Todos} />
-        <Route exact path="/profile" component={Home} />
+        <Route exact path="/profile" component={Profile} />
         <Route exact path="/logout" component={Logout} />
         <Redirect to="/" />
       </Switch>

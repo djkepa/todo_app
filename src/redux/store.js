@@ -25,11 +25,10 @@ const composeEnhancers =
 
 const enhancer = composeEnhancers(
   applyMiddleware(...middlewares),
-  reduxFirestore(config),
+  reduxFirestore(config, firebase),
 );
 
 const store = createStore(rootReducer, enhancer);
-
 // react-redux-firebase config
 export const rrfProps = {
   firebase,

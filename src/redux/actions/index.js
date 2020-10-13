@@ -2,7 +2,9 @@ export {
   signUp,
   signOut,
   signIn,
-  clean,
   verifyEmail,
   recoverPassword,
+  editProfile,
+  deleteUser,
+  clean,
 } from './auth.actions';

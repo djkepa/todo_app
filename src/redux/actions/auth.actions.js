@@ -7,7 +7,7 @@ export const signUp = (data) => async (
   { getFirebase, getFirestore },
 ) => {
   const firebase = getFirebase();
-  const firestore = getFirestore();
+  const firestore = getFirebase().firestore();
   dispatch({ type: actions.AUTH_START });
   try {
     const res = await firebase
@@ -85,5 +85,58 @@ export const recoverPassword = (data) => async (
     dispatch({ type: actions.RECOVERY_SUCCESS });
   } catch (err) {
     dispatch({ type: actions.RECOVERY_FAIL, payload: err.message });
+  }
+};
+
+// Edit profile
+export const editProfile = (data) => async (
+  dispatch,
+  getState,
+  { getFirebase, getFirestore },
+) => {
+  const firebase = getFirebase();
+  const firestore = getFirebase().firestore();
+  const user = firebase.auth().currentUser;
+  const { uid: userId, email: userEmail } = getState().firebase.auth;
+  dispatch({ type: actions.PROFILE_EDIT_START });
+  try {
+    //edit the user profile
+    if (data.email !== userEmail) {
+      await user.updateEmail(data.email);
+    }
+
+    await firestore.collection('users').doc(userId).set({
+      firstName: data.firstName,
+      lastName: data.lastName,
+    });
+
+    if (data.password.length > 0) {
+      await user.updatePassword(data.password);
+    }
+    dispatch({ type: actions.PROFILE_EDIT_SUCCESS });
+  } catch (err) {
+    dispatch({ type: actions.PROFILE_EDIT_FAIL, payload: err.message });
+  }
+};
+
+// Delete user
+export const deleteUser = () => async (
+  dispatch,
+  getState,
+  { getFirebase, getFirestore },
+) => {
+  const firebase = getFirebase();
+  const firestore = getFirebase().firestore();
+  const user = firebase.auth().currentUser;
+  const userId = getState().firebase.auth.uid;
+  dispatch({ type: actions.DELETE_START });
+  try {
+    await firestore.collection('users').doc(userId).delete();
+
+    await firestore.collection('todos').doc(userId).delete();
+
+    await user.delete();
+  } catch (err) {
+    dispatch({ type: actions.DELETE_FAIL, payload: err.message });
   }
 };

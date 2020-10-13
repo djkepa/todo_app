@@ -7,6 +7,18 @@ const initialState = {
     error: null,
     loading: false,
   },
+  recoverPassword: {
+    error: null,
+    loading: false,
+  },
+  profileEdit: {
+    error: null,
+    loading: false,
+  },
+  deleteUser: {
+    loading: false,
+    error: null,
+  },
 };
 
 // HELPER FUNCTIONS
@@ -77,6 +89,38 @@ const recoveryFail = (state, payload) => {
   };
 };
 
+const profileEditStart = (state) => {
+  return {
+    ...state,
+    profileEdit: { ...state.profileEdit, loading: true },
+  };
+};
+
+const profileEditFail = (state, payload) => {
+  return {
+    ...state,
+    profileEdit: { ...state.profileEdit, loading: false, error: payload },
+  };
+};
+
+const profileEditSuccess = (state) => {
+  return {
+    ...state,
+    profileEdit: { ...state.profileEdit, loading: false, error: false },
+  };
+};
+
+const deleteStart = (state) => {
+  return { ...state, deleteUser: { ...state.deleteUser, loading: true } };
+};
+
+const deleteFail = (state, payload) => {
+  return {
+    ...state,
+    deleteUser: { ...state.deleteUser, loading: false, error: payload },
+  };
+};
+
 const cleanUp = (state) => {
   return {
     ...state,
@@ -89,6 +133,16 @@ const cleanUp = (state) => {
     },
     recoverPassword: {
       ...state.recoverPassword,
+      loading: false,
+      error: null,
+    },
+    profileEdit: {
+      ...state.profileEdit,
+      loading: false,
+      error: null,
+    },
+    deleteUser: {
+      ...state.deleteUser,
       loading: false,
       error: null,
     },
@@ -129,6 +183,21 @@ export default (state = initialState, { type, payload }) => {
 
     case actions.RECOVERY_FAIL:
       return recoveryFail(state, payload);
+
+    case actions.PROFILE_EDIT_START:
+      return profileEditStart(state);
+
+    case actions.PROFILE_EDIT_SUCCESS:
+      return profileEditSuccess(state);
+
+    case actions.PROFILE_EDIT_FAIL:
+      return profileEditFail(state, payload);
+
+    case actions.DELETE_START:
+      return deleteStart(state);
+
+    case actions.DELETE_FAIL:
+      return deleteFail(state, payload);
 
     default:
       return state;
