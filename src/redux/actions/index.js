@@ -7,4 +7,6 @@ export {
   editProfile,
   deleteUser,
   clean,
-} from './auth.actions';
+} from './auth/auth.actions';
+
+export { addTodo, deleteTodo, editTodo } from './todo/todo.actions';

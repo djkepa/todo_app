@@ -1,16 +1,17 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import Layout from './layout/layout';
 
-import Todos from './containers/todos/todos.container';
 import Login from './containers/Auth/log-in/log-in.container';
 import SignUp from './containers/Auth/sign-up/sign-up.container';
 import Logout from './containers/Auth/log-out/log-out.container';
 import VerifyEmail from './containers/Auth/verify-email/verify-email.container';
 import RecoverPassword from './containers/Auth/recover-password/recover-password.container';
 import Profile from './containers/Auth/profile/profile.container';
+
+const Todos = React.lazy(() => import('./containers/todos/todos.container'));
 
 function App({ loggedIn, emailVerified }) {
   let routes;
@@ -26,12 +27,14 @@ function App({ loggedIn, emailVerified }) {
     );
   } else if (loggedIn && emailVerified) {
     routes = (
-      <Switch>
-        <Route exact path="/" component={Todos} />
-        <Route exact path="/profile" component={Profile} />
-        <Route exact path="/logout" component={Logout} />
-        <Redirect to="/" />
-      </Switch>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Switch>
+          <Route exact path="/" component={Todos} />
+          <Route exact path="/profile" component={Profile} />
+          <Route exact path="/logout" component={Logout} />
+          <Redirect to="/" />
+        </Switch>
+      </Suspense>
     );
   } else {
     routes = (
